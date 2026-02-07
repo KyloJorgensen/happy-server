@@ -24,7 +24,10 @@ export function voiceRoutes(app: Fastify) {
         }
     }, async (request, reply) => {
         const userId = request.userId; // CUID from JWT
-        const { agentId, revenueCatPublicKey } = request.body;
+        const { revenueCatPublicKey } = request.body;
+
+        // Use server-side agent ID if configured, otherwise fall back to client-provided
+        const agentId = process.env.ELEVENLABS_AGENT_ID || request.body.agentId;
 
         log({ module: 'voice' }, `Voice token request from user ${userId}`);
 
